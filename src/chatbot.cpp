@@ -12,7 +12,7 @@
 ChatBot::ChatBot()
 {
     // invalidate data handles
-    _image = nullptr;
+    //_image = nullptr;
     _chatLogic = nullptr;
     _rootNode = nullptr;
 }
@@ -48,7 +48,7 @@ ChatBot::ChatBot(const ChatBot &bot)
 
 ChatBot::ChatBot(ChatBot &&bot)
 {
-    _image.swap(bot._image);
+    _image = std::move(bot._image);
     _chatLogic = bot._chatLogic;
     _rootNode = bot._rootNode;
     std::cout << "ChatBot Move Constructor" << std::endl;
@@ -56,19 +56,25 @@ ChatBot::ChatBot(ChatBot &&bot)
 
 ChatBot &ChatBot::operator=(const ChatBot &bot)
 {
-    std::cout << "ChatBot Copy Assignment Operator" << std::endl;
-    _image = std::make_unique<wxBitmap>(*(bot._image));
-    _chatLogic = bot._chatLogic;
-    _rootNode = bot._rootNode;
+    if (this != &bot)
+    {
+        std::cout << "ChatBot Copy Assignment Operator" << std::endl;
+        _image = std::make_unique<wxBitmap>(*(bot._image));
+        _chatLogic = bot._chatLogic;
+        _rootNode = bot._rootNode;
+    }
     return *this;
 }
 
 ChatBot &ChatBot::operator=(ChatBot &&bot)
 {
-    std::cout << "ChatBot Move Assignment Operator" << std::endl;
-    _image.swap(bot._image);
-    _chatLogic = bot._chatLogic;
-    _rootNode = bot._rootNode;
+    if (this != &bot)
+    {
+        _chatLogic = bot._chatLogic;
+        _rootNode = bot._rootNode;
+        _image.swap(bot._image);
+        std::cout << "ChatBot Move Assignment Operator " << _image.get() << std::endl;
+    }
     return *this;
 }
 
@@ -119,6 +125,8 @@ void ChatBot::SetCurrentNode(GraphNode *node)
     std::mt19937 generator(int(std::time(0)));
     std::uniform_int_distribution<int> dis(0, answers.size() - 1);
     std::string answer = answers.at(dis(generator));
+
+    std::cout << "select a random node answer " << _chatLogic << std::endl;
 
     // send selected node answer to user
     _chatLogic->SendMessageToUser(answer);

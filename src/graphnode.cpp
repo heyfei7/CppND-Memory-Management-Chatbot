@@ -26,31 +26,26 @@ void GraphNode::AddEdgeToParentNode(GraphEdge *edge)
     _parentEdges.push_back(edge);
 }
 
-GraphEdge *GraphNode::AddEdgeToChildNode(GraphEdge &&edge)
+void GraphNode::AddEdgeToChildNode(std::unique_ptr<GraphEdge> edge)
 {
-    _childEdges.push_back(std::make_unique<GraphEdge>(edge));
-    return (_childEdges.end() - 1)->get();
+    _childEdges.push_back(std::move(edge));
 }
 
 //// STUDENT CODE
 ////
-void GraphNode::MoveChatbotHere(ChatBot &&cb)
+void GraphNode::MoveChatbotHere(ChatBot cb)
 {
-    if (!_chatBot)
-    {
-        _chatBot = std::make_unique<ChatBot>(std::move(cb));
-    }
-    else
-    {
-        *_chatBot = std::move(cb);
-    }
-    _chatBot->GetChatLogicHandle()->SetChatbotHandle(_chatBot.get());
-    _chatBot->SetCurrentNode(this);
+    _chatBot = std::move(cb);
+    std::cout << "GraphNode::MoveChatbotHere middle " << std::endl;
+    _chatBot.SetCurrentNode(this);
+    std::cout << "GraphNode::MoveChatbotHere end " << this << std::endl;
 }
 
 void GraphNode::MoveChatbotToNewNode(GraphNode *newNode)
 {
-    newNode->MoveChatbotHere(std::move(*_chatBot));
+    std::cout << "GraphNode::MoveChatbotToNewNode " << newNode << std::endl;
+    newNode->MoveChatbotHere(_chatBot);
+    std::cout << "GraphNode::MoveChatbotToNewNode end " << newNode << std::endl;
 }
 ////
 //// EOF STUDENT CODE

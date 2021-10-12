@@ -16,12 +16,9 @@ class ChatLogic
 private:
     //// STUDENT CODE
     ////
-
-    typedef std::unique_ptr<GraphNode> GraphNodePtr;
-
+    
     // data handles (owned)
-    std::vector<GraphNodePtr> _nodes;
-    std::vector<GraphEdge *>  _edges;
+    std::vector<std::unique_ptr<GraphNode> > _nodes;
 
     ////
     //// EOF STUDENT CODE
