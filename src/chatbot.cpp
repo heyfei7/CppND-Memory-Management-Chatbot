@@ -73,7 +73,7 @@ ChatBot &ChatBot::operator=(ChatBot &&bot)
         _chatLogic = bot._chatLogic;
         _rootNode = bot._rootNode;
         _image.swap(bot._image);
-        std::cout << "ChatBot Move Assignment Operator " << _image.get() << std::endl;
+        std::cout << "ChatBot Move Assignment Operator" << std::endl;
     }
     return *this;
 }
@@ -125,8 +125,6 @@ void ChatBot::SetCurrentNode(GraphNode *node)
     std::mt19937 generator(int(std::time(0)));
     std::uniform_int_distribution<int> dis(0, answers.size() - 1);
     std::string answer = answers.at(dis(generator));
-
-    std::cout << "select a random node answer " << _chatLogic << std::endl;
 
     // send selected node answer to user
     _chatLogic->SendMessageToUser(answer);

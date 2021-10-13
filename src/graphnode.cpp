@@ -36,16 +36,13 @@ void GraphNode::AddEdgeToChildNode(std::unique_ptr<GraphEdge> edge)
 void GraphNode::MoveChatbotHere(ChatBot cb)
 {
     _chatBot = std::move(cb);
-    std::cout << "GraphNode::MoveChatbotHere middle " << std::endl;
+    _chatBot.GetChatLogicHandle()->SetChatbotHandle(&_chatBot);
     _chatBot.SetCurrentNode(this);
-    std::cout << "GraphNode::MoveChatbotHere end " << this << std::endl;
 }
 
 void GraphNode::MoveChatbotToNewNode(GraphNode *newNode)
 {
-    std::cout << "GraphNode::MoveChatbotToNewNode " << newNode << std::endl;
     newNode->MoveChatbotHere(_chatBot);
-    std::cout << "GraphNode::MoveChatbotToNewNode end " << newNode << std::endl;
 }
 ////
 //// EOF STUDENT CODE
